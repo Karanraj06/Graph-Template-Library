@@ -24,8 +24,8 @@ int main() {
     return 0;
 }
 ```
-```
 Output
+```
 Number of connected components in g are 3
 ```
 # Test
