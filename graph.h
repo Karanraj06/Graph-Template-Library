@@ -224,3 +224,198 @@ public:
             in_degree.erase(u);
         }
     }
+    
+    void remove_edge(T u, T v) {
+        if (adj.find(u) != adj.end()) {
+            auto it = find(adj[u].begin(), adj[u].end(), v);
+            if (it != adj[u].end()) {
+                adj[u].erase(it);
+                in_degree[v]--;
+                number_of_edges--;
+            }
+        }
+    }
+
+    void clear() {
+        adj.clear();
+    }
+
+    std::vector<T> bfs(T s) {
+        std::vector<T> bfs;
+        std::unordered_map<T, bool> vis;
+        vis[s] = true;
+        std::queue<T> q;
+        q.push(s);
+        while (!q.empty()) {
+            T v = q.front();
+            q.pop();
+            bfs.push_back(v);
+            for (auto u : adj[v]) {
+                if (!vis[u]) {
+                    q.push(u);
+                    vis[u] = true;
+                }
+            }
+        }
+        return bfs;
+    }
+
+    std::vector<T> dfs(T u) {
+        std::vector<T> dfs;
+        std::unordered_map<T, bool> vis;
+        vis[u] = true;
+        std::stack<T> s;
+        s.push(u);
+        while (!s.empty()) {
+            T v = s.top();
+            s.pop();
+            dfs.push_back(v);
+            for (auto u : adj[v]) {
+                if (!vis[u]) {
+                    s.push(u);
+                    vis[u] = true;
+                }
+            }
+        }
+        return dfs;
+    }
+
+    bool cyclic() {
+        return topological_sort().size() != adj.size();
+    }
+
+    std::vector<T> topological_sort() {
+        std::vector<T> ans;
+        std::unordered_map<T, int> inDegree = in_degree;
+        std::queue<T> q;
+        for (auto i : adj) {
+            if (inDegree[i.first] == 0) {
+                q.push(i.first);
+            }
+        }
+
+        while (!q.empty()) {
+            T v = q.front();
+            q.pop();
+            ans.push_back(v);
+            for (auto i : adj[v]) {
+                inDegree[i]--;
+                if (inDegree[i] == 0) {
+                    q.push(i);
+                }
+            }
+        }
+
+        if (ans.size() == adj.size()) {
+            return ans;
+        }
+        return {};
+    }
+
+    // For printing SCCs in a directed graph
+    void dfs(T node, std::stack<T> &st, std::unordered_map<T, bool> &vis, std::unordered_map<T, std::vector<T>> &adj) {
+        vis[node] = true;
+        for (auto it : adj[node]) {
+            if (!vis[it]) {
+                dfs(it, st, vis, adj);
+            }
+        }
+        st.push(node);
+    }
+
+    void revDfs(int node, std::unordered_map<T, bool> &vis, std::unordered_map<T, std::vector<T>> &transpose, std::vector<T> &SCC) {
+        SCC.push_back(node);
+        vis[node] = true;
+        for (auto it : transpose[node]) {
+            if (!vis[it]) {
+                revDfs(it, vis, transpose, SCC);
+            }
+        }
+    }
+
+    // Driver code for sccs in a digraph
+    std::vector<std::vector<T>> SCCs() {
+        std::vector<std::vector<T>> SCCsOfGraph;
+        std::stack<int> st;
+        std::unordered_map<T, bool> vis;
+        for (auto it : adj) {
+            if (!vis[it.first]) {
+                dfs(it.first, st, vis, adj);
+            }
+        }
+
+        std::unordered_map<T, std::vector<T>> transpose;
+        for (auto it : adj) {
+            vis[it.first] = false;
+            for (auto itr : adj[it.first]) {
+                transpose[itr].push_back(it.first);
+            }
+        }
+
+        while (!st.empty()) {
+            int node = st.top();
+            st.pop();
+            if (!vis[node]) {
+                std::vector<T> SCC;
+                revDfs(node, vis, transpose, SCC);
+                SCCsOfGraph.push_back(SCC);
+            }
+        }
+        return SCCsOfGraph;
+    } // Driver code ends
+
+    int number_of_SCCs() {
+        std::vector<std::vector<T>> SCCs = this->SCCs();
+        return SCCs.size();
+    }
+};
+
+template <typename T>
+class wgraph {
+public:
+    std::map<T, std::vector<std::pair<T, int>>> adj;
+    int number_of_edges = 0;
+
+    void add_edge(T v, T w, int k = 1) {
+        adj[v].push_back({w, k});
+        adj[w].push_back({v, k});
+    }
+
+    void add_node(T u) {
+        adj[u];
+    }
+
+    void remove_node(T u) {
+        number_of_edges -= adj[u].size();
+        for (auto i : adj[u]) {
+            int p = 0;
+            for (auto it : adj[i.first]) {
+                if (it.first == u) {
+                    adj[i.first].erase(adj[i.first].begin() + p);
+                }
+                p++;
+            }
+        }
+        adj.erase(u);
+    }
+
+    void remove_edge(T u, T v) {
+        std::vector<std::pair<T, int>> V1 = adj[u];
+        std::vector<std::pair<T, int>> V2 = adj[v];
+        int p = 0;
+        for (auto it : V1) {
+            if (it.first == v) {
+                adj[u].erase(adj[u].begin() + p);
+            }
+            p++;
+        }
+
+        p = 0;
+        for (auto it : V2) {
+            if (it.first == u) {
+                adj[v].erase(adj[v].begin() + p);
+            }
+            p++;
+        }
+        number_of_edges--;
+    }
