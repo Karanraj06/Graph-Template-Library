@@ -9,7 +9,7 @@ Defines container template classes to study graphs in C++
 - Nodes can be any built-in data type
 # Example
 Finds number of connected components in an undirected graph
-```
+```cpp
 #include <iostream>
 #include "graph.h"
 
