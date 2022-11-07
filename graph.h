@@ -179,6 +179,25 @@ public:
 
 template <typename T>
 class digraph {
+        void dfs(T node, std::stack<T> &st, std::unordered_map<T, bool> &vis, std::unordered_map<T, std::vector<T>> &adj) {
+        vis[node] = true;
+        for (auto it : adj[node]) {
+            if (!vis[it]) {
+                dfs(it, st, vis, adj);
+            }
+        }
+        st.push(node);
+    }
+
+    void revDfs(int node, std::unordered_map<T, bool> &vis, std::unordered_map<T, std::vector<T>> &transpose, std::vector<T> &SCC) {
+        SCC.push_back(node);
+        vis[node] = true;
+        for (auto it : transpose[node]) {
+            if (!vis[it]) {
+                revDfs(it, vis, transpose, SCC);
+            }
+        }
+    }
 public:
     int number_of_edges = 0;
     std::unordered_map<T, std::vector<T>> adj;
@@ -313,25 +332,7 @@ public:
     }
 
     // For printing SCCs in a directed graph
-    void dfs(T node, std::stack<T> &st, std::unordered_map<T, bool> &vis, std::unordered_map<T, std::vector<T>> &adj) {
-        vis[node] = true;
-        for (auto it : adj[node]) {
-            if (!vis[it]) {
-                dfs(it, st, vis, adj);
-            }
-        }
-        st.push(node);
-    }
 
-    void revDfs(int node, std::unordered_map<T, bool> &vis, std::unordered_map<T, std::vector<T>> &transpose, std::vector<T> &SCC) {
-        SCC.push_back(node);
-        vis[node] = true;
-        for (auto it : transpose[node]) {
-            if (!vis[it]) {
-                revDfs(it, vis, transpose, SCC);
-            }
-        }
-    }
 
     // Driver code for sccs in a digraph
     std::vector<std::vector<T>> SCCs() {
