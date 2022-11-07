@@ -92,4 +92,4 @@ int getMinDiceThrows(digraph<int> &board, int n)
 	return dist;   //it will return the distance of destination vertex i.e. n from the source vertex 1 which is the minimum no. of moves to win the game. 
 }
 
-//============================================SOLUTIONENDS===================================================================
+//============================================SOLUTION ENDS===================================================================
