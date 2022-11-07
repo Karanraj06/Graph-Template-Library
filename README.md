@@ -42,7 +42,7 @@ OR
 ```
 % cd Desktop/3rd\ Semester/CS201/CS201_Project_Group_1/Code_file_Group_1/Examples
 ```
-### Compile C program
+### Compile C++ program
 ```
 % g++ -std=c++20 file_name
 ```
@@ -50,7 +50,7 @@ For example,
 ```
 % g++ -std=c++20 example1.cpp
 ```
-### Run C program
+### Run C++ program
 ```
 % ./a.out
 ```
