@@ -419,3 +419,241 @@ public:
         }
         number_of_edges--;
     }
+
+    std::vector<std::vector<int>> bellman_ford() {
+        std::vector<std::vector<int>> distance;
+        for (auto it2 : adj) {
+            std::map<T, int> dist;
+            for (auto it1 : adj) {
+                dist[it1.first] = INT_MAX;
+            }
+
+            dist[it2.first] = 0;
+            for (int i = 0; i < adj.size() - 1; i++) {
+                for (auto it : adj) {
+                    for (auto it1 = it.second.begin(); it1 != it.second.end(); it1++) {
+                        T u = it.first;
+                        T v = it1->first;
+                        int wt = it1->second;
+                        if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {
+                            dist[v] = dist[u] + wt;
+                        }
+                    }
+                }
+            }
+
+            std::vector<int> dist_;
+            for (auto it : dist) {
+                dist_.push_back(it.second);
+            }
+
+            for (auto it : adj) {
+                for (auto it1 = it.second.begin(); it1 != it.second.end(); it1++) {
+                    T u = it.first;
+                    T v = it1->first;
+                    int wt = it1->second;
+                    if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {
+                        return {{-1}};
+                    }
+                }
+            }
+            distance.push_back(dist_);
+        }
+        return distance;
+    }
+
+    std::unordered_map<T, int> dijkstra(T s) {
+        d.clear();
+        p.clear();
+        for (auto i : adj) {
+            d[i.first] = INT_MAX;
+            p[i.first] = T{};
+        }
+
+        d[s] = 0;
+        std::priority_queue<std::pair<int, T>, std::vector<std::pair<int, T>>, std::greater<std::pair<int, T>>> q;
+        q.push({0, s});
+        while (!q.empty()) {
+            T v = q.top().second;
+            int d_v = q.top().first;
+            q.pop();
+            if (d_v != d[v]) {
+                continue;
+            }
+
+            for (auto e : adj[v]) {
+                T to = e.first;
+                int len = e.second;
+
+                if (d[v] + len < d[to]) {
+                    d[to] = d[v] + len;
+                    p[to] = v;
+                    q.push({d[to], to});
+                }
+            }
+        }
+        return d;
+    }
+
+    std::vector<T> path(T from, T to) {
+        dijkstra(from);
+        d.clear();
+        std::vector<T> path1;
+        for (T v = to; v != from; v = p[v]) {
+            path1.push_back(v);
+        }
+        path1.push_back(from);
+        reverse(path1.begin(), path1.end());
+        return path1;
+    }
+
+private:
+    std::unordered_map<T, int> d;
+    std::unordered_map<T, T> p;
+};
+
+template <typename T>
+class wdigraph {
+public:
+    std::map<T, std::vector<std::pair<T, int>>> adj;
+    int number_of_edges = 0;
+    std::unordered_map<T, int> in_degree;
+
+    void add_edge(T v, T w, int k = 0) {
+        adj[v].push_back({w, k});
+        adj[w];
+    }
+
+    void add_node(T u) {
+        adj[u];
+    }
+
+    void remove_node(T u) {
+        for (auto &i : adj) {
+            if (i.first == u) {
+                std::vector<std::pair<T, int>> V = adj[u];
+                number_of_edges -= V.size();
+                for (auto j : V) {
+                    in_degree[j.first]--;
+                }
+                continue;
+            }
+
+            std::vector<std::pair<T, int>> V = adj[i.first];
+            int p = 0;
+            for (auto it : V) {
+                if (it.first == u) {
+                    adj[i.first].erase(adj[i.first].begin() + p);
+                    number_of_edges--;
+                }
+                p++;
+            }
+        }
+        adj.erase(u);
+        in_degree.erase(u);
+    }
+
+    void remove_edge(T u, T v) {
+        std::vector<std::pair<T, int>> V = adj[u];
+        int p = 0;
+        for (auto it : V) {
+            if (it.first == v) {
+                adj[u].erase(adj[u].begin() + p);
+                in_degree[v]--;
+                number_of_edges--;
+            }
+            p++;
+        }
+    }
+
+    std::vector<std::vector<int>> bellman_ford() {
+        std::vector<std::vector<int>> distance;
+        for (auto it2 : adj) {
+            std::map<T, int> dist;
+            for (auto it1 : adj) {
+                dist[it1.first] = INT_MAX;
+            }
+
+            dist[it2.first] = 0;
+            for (int i = 0; i < adj.size() - 1; i++) {
+                for (auto it : adj) {
+                    for (auto it1 = it.second.begin(); it1 != it.second.end(); it1++) {
+                        T u = it.first;
+                        T v = it1->first;
+                        int wt = it1->second;
+                        if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {
+                            dist[v] = dist[u] + wt;
+                        }
+                    }
+                }
+            }
+
+            std::vector<int> dist_;
+            for (auto it : dist) {
+                dist_.push_back(it.second);
+            }
+
+            for (auto it : adj) {
+                for (auto it1 = it.second.begin(); it1 != it.second.end(); it1++) {
+                    T u = it.first;
+                    T v = it1->first;
+                    int wt = it1->second;
+                    if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {
+                        return {{-1}};
+                    }
+                }
+            }
+            distance.push_back(dist_);
+        }
+        return distance;
+    }
+
+    std::unordered_map<T, int> dijkstra(T s) {
+        d.clear();
+        p.clear();
+        for (auto i : adj) {
+            d[i.first] = INT_MAX;
+            p[i.first] = T{};
+        }
+
+        d[s] = 0;
+        std::priority_queue<std::pair<int, T>, std::vector<std::pair<int, T>>, std::greater<std::pair<int, T>>> q;
+        q.push({0, s});
+        while (!q.empty()) {
+            T v = q.top().second;
+            int d_v = q.top().first;
+            q.pop();
+            if (d_v != d[v]) {
+                continue;
+            }
+
+            for (auto e : adj[v]) {
+                T to = e.first;
+                int len = e.second;
+
+                if (d[v] + len < d[to]) {
+                    d[to] = d[v] + len;
+                    p[to] = v;
+                    q.push({d[to], to});
+                }
+            }
+        }
+        return d;
+    }
+
+    std::vector<T> path(T from, T to) {
+        dijkstra(from);
+        d.clear();
+        std::vector<T> path1;
+        for (T v = to; v != from; v = p[v]) {
+            path1.push_back(v);
+        }
+        path1.push_back(from);
+        reverse(path1.begin(), path1.end());
+        return path1;
+    }
+
+private:
+    std::unordered_map<T, int> d;
+    std::unordered_map<T, T> p;
+};
