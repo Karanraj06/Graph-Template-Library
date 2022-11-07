@@ -4,14 +4,13 @@
 #include <map>
 #include <queue>
 #include <stack>
-#include <unordered_map>
 #include <vector>
 
 template <typename T>
 class graph {
 public:
     int number_of_edges = 0;
-    std::unordered_map<T, std::vector<T>> adj;
+    std::map<T, std::vector<T>> adj;
 
     void add_node(T u) {
         adj[u];
@@ -58,7 +57,7 @@ public:
 
     std::vector<T> bfs(T s) {
         std::vector<T> bfs;
-        std::unordered_map<T, bool> vis;
+        std::map<T, bool> vis;
         vis[s] = true;
         std::queue<T> q;
         q.push(s);
@@ -78,7 +77,7 @@ public:
 
     std::vector<T> dfs(T u) {
         std::vector<T> dfs;
-        std::unordered_map<T, bool> vis;
+        std::map<T, bool> vis;
         vis[u] = true;
         std::stack<T> s;
         s.push(u);
@@ -98,7 +97,7 @@ public:
 
     int number_of_connected_components() {
         int n(0);
-        std::unordered_map<T, bool> vis;
+        std::map<T, bool> vis;
         std::stack<T> s;
         for (auto it = adj.begin(); it != adj.end(); it++) {
             if (!vis[it->first]) {
@@ -121,8 +120,8 @@ public:
     }
 
     bool cyclic() {
-        std::unordered_map<T, bool> vis;
-        std::unordered_map<T, T> p;
+        std::map<T, bool> vis;
+        std::map<T, T> p;
 
         std::function<bool(T, T)> dfs = [&](T v, T _p) {
             vis[v] = true;
@@ -149,7 +148,7 @@ public:
 
     bool is_bipartite() {
         bool flag = true;
-        std::unordered_map<T, int> side;
+        std::map<T, int> side;
         std::queue<T> q;
 
         for (auto i : adj) {
@@ -179,7 +178,7 @@ public:
 
 template <typename T>
 class digraph {
-        void dfs(T node, std::stack<T> &st, std::unordered_map<T, bool> &vis, std::unordered_map<T, std::vector<T>> &adj) {
+        void dfs(T node, std::stack<T> &st, std::map<T, bool> &vis, std::map<T, std::vector<T>> &adj) {
         vis[node] = true;
         for (auto it : adj[node]) {
             if (!vis[it]) {
@@ -189,7 +188,7 @@ class digraph {
         st.push(node);
     }
 
-    void revDfs(int node, std::unordered_map<T, bool> &vis, std::unordered_map<T, std::vector<T>> &transpose, std::vector<T> &SCC) {
+    void revDfs(int node, std::map<T, bool> &vis, std::map<T, std::vector<T>> &transpose, std::vector<T> &SCC) {
         SCC.push_back(node);
         vis[node] = true;
         for (auto it : transpose[node]) {
@@ -200,8 +199,8 @@ class digraph {
     }
 public:
     int number_of_edges = 0;
-    std::unordered_map<T, std::vector<T>> adj;
-    std::unordered_map<T, int> in_degree;
+    std::map<T, std::vector<T>> adj;
+    std::map<T, int> in_degree;
 
     void add_node(T u) {
         adj[u];
@@ -261,7 +260,7 @@ public:
 
     std::vector<T> bfs(T s) {
         std::vector<T> bfs;
-        std::unordered_map<T, bool> vis;
+        std::map<T, bool> vis;
         vis[s] = true;
         std::queue<T> q;
         q.push(s);
@@ -281,7 +280,7 @@ public:
 
     std::vector<T> dfs(T u) {
         std::vector<T> dfs;
-        std::unordered_map<T, bool> vis;
+        std::map<T, bool> vis;
         vis[u] = true;
         std::stack<T> s;
         s.push(u);
@@ -305,7 +304,7 @@ public:
 
     std::vector<T> topological_sort() {
         std::vector<T> ans;
-        std::unordered_map<T, int> inDegree = in_degree;
+        std::map<T, int> inDegree = in_degree;
         std::queue<T> q;
         for (auto i : adj) {
             if (inDegree[i.first] == 0) {
@@ -338,14 +337,14 @@ public:
     std::vector<std::vector<T>> SCCs() {
         std::vector<std::vector<T>> SCCsOfGraph;
         std::stack<int> st;
-        std::unordered_map<T, bool> vis;
+        std::map<T, bool> vis;
         for (auto it : adj) {
             if (!vis[it.first]) {
                 dfs(it.first, st, vis, adj);
             }
         }
 
-        std::unordered_map<T, std::vector<T>> transpose;
+        std::map<T, std::vector<T>> transpose;
         for (auto it : adj) {
             vis[it.first] = false;
             for (auto itr : adj[it.first]) {
@@ -463,7 +462,7 @@ public:
         return distance;
     }
 
-    std::unordered_map<T, int> dijkstra(T s) {
+    std::map<T, int> dijkstra(T s) {
         d.clear();
         p.clear();
         for (auto i : adj) {
@@ -509,8 +508,8 @@ public:
     }
 
 private:
-    std::unordered_map<T, int> d;
-    std::unordered_map<T, T> p;
+    std::map<T, int> d;
+    std::map<T, T> p;
 };
 
 template <typename T>
@@ -518,7 +517,7 @@ class wdigraph {
 public:
     std::map<T, std::vector<std::pair<T, int>>> adj;
     int number_of_edges = 0;
-    std::unordered_map<T, int> in_degree;
+    std::map<T, int> in_degree;
 
     void add_edge(T v, T w, int k = 0) {
         adj[v].push_back({w, k});
@@ -609,7 +608,7 @@ public:
         return distance;
     }
 
-    std::unordered_map<T, int> dijkstra(T s) {
+    std::map<T, int> dijkstra(T s) {
         d.clear();
         p.clear();
         for (auto i : adj) {
@@ -655,6 +654,6 @@ public:
     }
 
 private:
-    std::unordered_map<T, int> d;
-    std::unordered_map<T, T> p;
+    std::map<T, int> d;
+    std::map<T, T> p;
 };
