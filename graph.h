@@ -367,9 +367,7 @@ public:
             return ans;
         }
         return {};
-    }
-
-   
+    }   
 
 
     // This function prints all the SCCs in the given directed graph using Kosaraju's Algorithm
@@ -479,14 +477,18 @@ public:
         adj.clear();
     }
 
+    //This function finds shortest distances from src to all other vertices, it also detects negative weight cycle
     std::vector<std::vector<int>> bellman_ford() {
-        std::vector<std::vector<int>> distance;
+        std::vector<std::vector<int>> distance;                         //it stores the shortest distances from source vertex to all other vertices 
         for (auto it2 : adj) {
             std::map<T, int> dist;
+
+            //Initialize distances from src to all other vertices as INFINITE
             for (auto it1 : adj) {
                 dist[it1.first] = INT_MAX;
             }
 
+            //Relax all edges |V| - 1 times. A simple shortest path from src to any other vertex can have at-most |V| - 1 edges
             dist[it2.first] = 0;
             for (int i = 0; i < adj.size() - 1; i++) {
                 for (auto it : adj) {
@@ -506,17 +508,18 @@ public:
                 dist_.push_back(it.second);
             }
 
+            //check for negative-weight cycles.  The above step guarantees shortest distances if graph doesn't contain negative weight cycle.  If we get a shorter path, then there is a cycle.
             for (auto it : adj) {
                 for (auto it1 = it.second.begin(); it1 != it.second.end(); it1++) {
                     T u = it.first;
                     T v = it1->first;
                     int wt = it1->second;
                     if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {
-                        return {{-1}};
+                        return {{-1}};                                  // If negative cycle is detected, simply return {{-1}}
                     }
                 }
             }
-            distance.push_back(dist_);
+            distance.push_back(dist_);                                  //finally return the distance vector
         }
         return distance;
     }
@@ -649,14 +652,18 @@ public:
         adj.clear();
     }
 
+    //This function finds shortest distances from src to all other vertices, it also detects negative weight cycle
     std::vector<std::vector<int>> bellman_ford() {
-        std::vector<std::vector<int>> distance;
+        std::vector<std::vector<int>> distance;                  //it stores the shortest distances from source vertex to all other vertices 
+
         for (auto it2 : adj) {
             std::map<T, int> dist;
-            for (auto it1 : adj) {
+            //Initialize distances from src to all other vertices as INFINITE
+            for (auto it1 : adj) {                                          
                 dist[it1.first] = INT_MAX;
             }
 
+            //Relax all edges |V| - 1 times. A simple shortest path from src to any other vertex can have  at-most |V| - 1 edges             
             dist[it2.first] = 0;
             for (int i = 0; i < adj.size() - 1; i++) {
                 for (auto it : adj) {
@@ -675,20 +682,20 @@ public:
             for (auto it : dist) {
                 dist_.push_back(it.second);
             }
-
+            //check for negative-weight cycles. The above step guarantees shortest distances if graph doesn't contain negative weight cycle. If we get a shorter path, then there is a cycle.
             for (auto it : adj) {
                 for (auto it1 = it.second.begin(); it1 != it.second.end(); it1++) {
                     T u = it.first;
                     T v = it1->first;
                     int wt = it1->second;
                     if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {
-                        return {{-1}};
+                        return {{-1}};                  // If negative cycle is detected, simply return {{-1}}
                     }
                 }
             }
             distance.push_back(dist_);
         }
-        return distance;
+        return distance;                                //finally return the distance vector
     }
 
     std::map<T, int> dijkstra(T s) {
