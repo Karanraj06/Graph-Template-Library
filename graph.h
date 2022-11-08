@@ -4,9 +4,9 @@
 #include <map>
 #include <queue>
 #include <stack>
-#include <vector>
+#include <vector>   
 
-template <typename T>
+template <typename T>       
 class graph {
 public:
     int number_of_edges = 0;                    //number of edges stores the total edges in the graph
@@ -130,7 +130,8 @@ public:
         return n;                               //finally return the number of connected components
     }
 
-    bool cyclic() {
+    //This function returns true if the graph is cyclic
+    bool cyclic() {                         
         std::map<T, bool> vis;
         std::map<T, T> p;
 
@@ -209,106 +210,115 @@ class digraph {
         }
     }
 public:
-    int number_of_edges = 0;
-    std::map<T, std::vector<T>> adj;
-    std::map<T, int> in_degree;
+    int number_of_edges = 0;                    //number of edges stores the total edges in the directed graph
+    std::map<T, std::vector<T>> adj;            //adj is the adjacency list of the directed graph
+    std::map<T, int> in_degree;                 //in_degree stores the indegree of a given vertex
 
+    //This function adds an isolated node in the directed graph
     void add_node(T u) {
         adj[u];
     }
 
+    //This function adds a directed edge from vertex u to vertex v.
     void add_edge(T u, T v) {
-        number_of_edges++;
-        adj[u].push_back(v);
-        adj[v];
-        in_degree[v]++;
+        number_of_edges++;                      //updating the number of edges
+        adj[u].push_back(v);                    //updating the adjacency list of u
+        adj[v];                                 //forming empty adjacency list for v
+        in_degree[v]++;                         //updating indegree of v
     }
 
+    //It returns the total vertices present in the directed graph.
     int number_of_nodes() {
         return adj.size();
     }
 
+    //out_degree stores the outdegree of a given vertex
     int out_degree(T u) {
         return adj[u].size();
     }
 
+    //This function removes a given vertex from the graph.
     void remove_node(T u) {
         if (adj.find(u) != adj.end()) {
             for (auto &i : adj) {
                 if (i.first == u) {
-                    number_of_edges -= i.second.size();
-                    for (auto j : i.second) {
-                        in_degree[j]--;
+                    number_of_edges -= i.second.size();                //removing all the edges connected to the given vertex 
+                    for (auto j : i.second) {                          
+                        in_degree[j]--;                                //updating the indegree of its neighbours
                     }
                     continue;
                 }
 
                 auto it = find(i.second.begin(), i.second.end(), u);
                 if (it != i.second.end()) {
-                    i.second.erase(it);
-                    number_of_edges--;
+                    i.second.erase(it);                             //removing the given vertex from the adjacency list of its neighbours
+                    number_of_edges--;                              //again updating the number of edges 
                 }
             }
-            adj.erase(u);
-            in_degree.erase(u);
+            adj.erase(u);                                           //removing the given vertex from the adjacency list
+            in_degree.erase(u);                                     //and then updating ther indegree of the removed vertex
         }
     }
     
+    //This function removes a given edge between two vertices.
     void remove_edge(T u, T v) {
-        if (adj.find(u) != adj.end()) {
+        if (adj.find(u) != adj.end()) {                             //if vertex u is present in the graph
             auto it = find(adj[u].begin(), adj[u].end(), v);
-            if (it != adj[u].end()) {
-                adj[u].erase(it);
-                in_degree[v]--;
-                number_of_edges--;
+            if (it != adj[u].end()) {                               //if vertex v is also present in the graph
+                adj[u].erase(it);                                   //then, removing v from adjacency list of u
+                in_degree[v]--;                                     //updating the indegree of v
+                number_of_edges--;                                  //finally updating the number of edges.
             }
         }
     }
 
+     //It clears the entire directed graph i.e. it removes all vertices.
     void clear() {
         adj.clear();
     }
 
+    //It performs Breadth First Search traversal on given graph starting from given source vertex s 
     std::vector<T> bfs(T s) {
-        std::vector<T> bfs;
-        std::map<T, bool> vis;
-        vis[s] = true;
-        std::queue<T> q;
-        q.push(s);
+        std::vector<T> bfs;                                         //It stores the BFS traversal of the given graph
+        std::map<T, bool> vis;                                      //vis map marks visited vertices as true
+        vis[s] = true;                                              //marking source vertex s as visited
+        std::queue<T> q;                                            //q is the exploration queue
+        q.push(s);                                                  //pushing the source vertex s in the queue
         while (!q.empty()) {
-            T v = q.front();
-            q.pop();
-            bfs.push_back(v);
-            for (auto u : adj[v]) {
+            T v = q.front();    
+            q.pop();                                                 //pop the front vertex of the queue 
+            bfs.push_back(v);                                        //and pushes it in the BFS traversal 
+            for (auto u : adj[v]) {                                  //pushing all the non-visited neighbours of the popped vertex in the queue                                    
                 if (!vis[u]) {
                     q.push(u);
-                    vis[u] = true;
+                    vis[u] = true;                                  //and marking them as visited
                 }
             }
         }
-        return bfs;
+        return bfs;                                                 //finally return the BFS traversal
     }
 
-    std::vector<T> dfs(T u) {
-        std::vector<T> dfs;
-        std::map<T, bool> vis;
-        vis[u] = true;
-        std::stack<T> s;
-        s.push(u);
+    std::vector<T> dfs(T u) {                                       //It performs Depth First Search traversal on given graph starting from given source vertex u
+        std::vector<T> dfs;                                         //It stores the DFS traversal of the given graph
+        std::map<T, bool> vis;                                      //vis map marks visited vertices as true
+        vis[u] = true;                                              //marking source vertex u as visited
+        std::stack<T> s;                                            //s is the exploration stack
+        s.push(u);                                                  //pushing the source vertex u in the stack
         while (!s.empty()) {
-            T v = s.top();
-            s.pop();
-            dfs.push_back(v);
-            for (auto u : adj[v]) {
+            T v = s.top();                                          
+            s.pop();                                                //pop the top vertex of the stack 
+            dfs.push_back(v);                                       //and pushes it in the DFS traversal
+            for (auto u : adj[v]) {                                 //pushing all the non-visited neighbours of the popped vertex in the stack
                 if (!vis[u]) {
                     s.push(u);
-                    vis[u] = true;
+                    vis[u] = true;                                   //and marking them as visited
                 }
             }
         }
-        return dfs;
+        return dfs;                                                 //finally return the DFS traversal
     }
 
+    //This function returns true if the graph is cyclic
     bool cyclic() {
         return topological_sort().size() != adj.size();
     }
@@ -341,39 +351,40 @@ public:
         return {};
     }
 
-    // For printing SCCs in a directed graph
+   
 
 
-    // Driver code for sccs in a digraph
+    // This function prints all the SCCs in the given directed graph using Kosaraju's Algorithm
     std::vector<std::vector<T>> SCCs() {
-        std::vector<std::vector<T>> SCCsOfGraph;
-        std::stack<int> st;
-        std::map<T, bool> vis;
-        for (auto it : adj) {
+        std::vector<std::vector<T>> SCCsOfGraph;        //this vector stores all SCC vectors
+        std::stack<int> st;                             //Fills Stack with vertices (in increasing order of finishing times)
+        std::map<T, bool> vis;                          //vis map marks visited vertices as true
+        for (auto it : adj) {                           //Calling dfs on first key in adj
             if (!vis[it.first]) {
-                dfs(it.first, st, vis, adj);
+                dfs(it.first, st, vis, adj);            //which fills the stack according to finishing time
             }
         }
 
-        std::map<T, std::vector<T>> transpose;
+        std::map<T, std::vector<T>> transpose;          //stores the transpose of the original graph
+        //Filling the adj list of the transpose graph in transpose
         for (auto it : adj) {
             vis[it.first] = false;
-            for (auto itr : adj[it.first]) {
+            for (auto itr : adj[it.first]) {        
                 transpose[itr].push_back(it.first);
             }
         }
 
-        while (!st.empty()) {
+        while (!st.empty()) {                           //Popping the vertex from top one by one 
             int node = st.top();
             st.pop();
-            if (!vis[node]) {
-                std::vector<T> SCC;
-                revDfs(node, vis, transpose, SCC);
+            if (!vis[node]) {                           //and then calling dfs on the transpose graph 
+                std::vector<T> SCC;                 
+                revDfs(node, vis, transpose, SCC);      //which in turn will stores all the SCCs in the SCCsOfGraph
                 SCCsOfGraph.push_back(SCC);
             }
         }
-        return SCCsOfGraph;
-    } // Driver code ends
+        return SCCsOfGraph;                            //finally return the SCCsOfGraph vector   
+    } 
 
     int number_of_SCCs() {
         std::vector<std::vector<T>> SCCs = this->SCCs();
