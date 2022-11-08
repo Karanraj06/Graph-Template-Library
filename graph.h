@@ -109,7 +109,7 @@ public:
         int n(0);                               // n stores the number of connected components in the graph
         std::map<T, bool> vis;                  // vis map marks visited vertices as true
         std::stack<T> s;                        // s is the exploration stack
-        for (auto it = adj.begin(); it != adj.end(); it++) {    //t raversing over all the vertices
+        for (auto it = adj.begin(); it != adj.end(); it++) {    // traversing over all the vertices
             if (!vis[it->first]) {
                 vis[it->first] = true;          // if current vertex in not visited, then mark it as visited and start dfs from this vertex as source
                 n++;
@@ -297,7 +297,7 @@ public:
             for (auto u : adj[v]) {                                  // pushing all the non-visited neighbours of the popped vertex in the queue                                    
                 if (!vis[u]) {
                     q.push(u);
-                    vis[u] = true;                                  // and marking them as visited
+                    vis[u] = true;                                   // and marking them as visited
                 }
             }
         }
