@@ -9,99 +9,110 @@
 template <typename T>
 class graph {
 public:
-    int number_of_edges = 0;
-    std::map<T, std::vector<T>> adj;
+    int number_of_edges = 0;                    //number of edges stores the total edges in the graph
+    std::map<T, std::vector<T>> adj;            //adj is the adjacency list of the graph
 
-    void add_node(T u) {
+    //This function adds an isolated node in the graph
+    void add_node(T u) {                           
         adj[u];
     }
 
+    //This function adds an edge between given two vertices.
     void add_edge(T u, T v) {
         number_of_edges++;
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
 
+    //It returns the total vertices present in the graph.
     int number_of_nodes() {
         return adj.size();
     }
 
+    //This function removes a given vertex from the graph.
     void remove_node(T u) {
         if (adj.find(u) != adj.end()) {
-            number_of_edges -= adj[u].size();
-            for (auto i : adj[u]) {
+            number_of_edges -= adj[u].size();       //removing all the edges connected to the given vertex 
+            for (auto i : adj[u]) {                 //removing the given vertex from the adjacency list of its neighbours
                 adj[i].erase(find(adj[i].begin(), adj[i].end(), u));
             }
-            adj.erase(u);
+            adj.erase(u);                           //Finally removing the given vertex 
         }
     }
 
-    void remove_edge(T u, T v) {
-        if (adj.find(u) != adj.end()) {
-            auto it = find(adj[u].begin(), adj[u].end(), v);
-            if (it != adj[u].end()) {
-                adj[u].erase(it);
-                adj[v].erase(find(adj[v].begin(), adj[v].end(), u));
-                number_of_edges--;
+
+    //This function removes a given edge between two vertices.
+    void remove_edge(T u, T v) {    
+        if (adj.find(u) != adj.end()) {                               //if vertex u is present in the graph
+            auto it = find(adj[u].begin(), adj[u].end(), v);          
+            if (it != adj[u].end()) {                                 //if vertex v is also present in the graph
+                adj[u].erase(it);                                     //then, removing v from adjacency list of u
+                adj[v].erase(find(adj[v].begin(), adj[v].end(), u));  //and removing u from adjacency list of v  
+                number_of_edges--;                                    //finally updating the number of edges.
             }
         }
     }
 
+    //It just returns the degree of a given vertex.
     int degree(T u) {
         return adj[u].size();
     }
 
+    //It clears the entire graph i.e. it removes all vertices.
     void clear() {
         adj.clear();
     }
 
+    //It performs Breadth First Search traversal on given graph starting from given source vertex s 
     std::vector<T> bfs(T s) {
-        std::vector<T> bfs;
-        std::map<T, bool> vis;
-        vis[s] = true;
-        std::queue<T> q;
-        q.push(s);
+        std::vector<T> bfs;                     //It stores the BFS traversal of the given graph
+        std::map<T, bool> vis;                  //vis map marks visited vertices as true
+        vis[s] = true;                          //marking source vertex s as visited
+        std::queue<T> q;                        //q is the exploration queue
+        q.push(s);                              //pushing the source vertex s in the queue
         while (!q.empty()) {
             T v = q.front();
-            q.pop();
-            bfs.push_back(v);
-            for (auto u : adj[v]) {
+            q.pop();                            //pop the front vertex of the queue 
+            bfs.push_back(v);                   //and pushes it in the BFS traversal 
+            for (auto u : adj[v]) {             //pushing all the non-visited neighbours of the popped vertex in the queue
                 if (!vis[u]) {
                     q.push(u);
-                    vis[u] = true;
+                    vis[u] = true;              //and marking them as visited
                 }
             }
         }
-        return bfs;
+        return bfs;                             //finally return the BFS traversal
     }
 
+    //It performs Depth First Search traversal on given graph starting from given source vertex u
     std::vector<T> dfs(T u) {
-        std::vector<T> dfs;
-        std::map<T, bool> vis;
-        vis[u] = true;
-        std::stack<T> s;
-        s.push(u);
+        std::vector<T> dfs;                     //It stores the DFS traversal of the given graph
+        std::map<T, bool> vis;                  //vis map marks visited vertices as true
+        vis[u] = true;                          //marking source vertex u as visited
+        std::stack<T> s;                        //s is the exploration stack
+        s.push(u);                              //pushing the source vertex u in the stack
         while (!s.empty()) {
             T v = s.top();
-            s.pop();
-            dfs.push_back(v);
-            for (auto u : adj[v]) {
+            s.pop();                            //pop the top vertex of the stack 
+            dfs.push_back(v);                   //and pushes it in the DFS traversal
+            for (auto u : adj[v]) {             //pushing all the non-visited neighbours of the popped vertex in the stack
                 if (!vis[u]) {
                     s.push(u);
-                    vis[u] = true;
+                    vis[u] = true;              //and marking them as visited
                 }
             }
         }
-        return dfs;
+        return dfs;                             //finally return the DFS traversal
     }
 
+    //This function returns the number of connected components in the graph using dfs traversal.
     int number_of_connected_components() {
-        int n(0);
-        std::map<T, bool> vis;
-        std::stack<T> s;
-        for (auto it = adj.begin(); it != adj.end(); it++) {
+        int n(0);                               //n stores the number of connected components in the graph
+        std::map<T, bool> vis;                  //vis map marks visited vertices as true
+        std::stack<T> s;                        //s is the exploration stack
+        for (auto it = adj.begin(); it != adj.end(); it++) {    //traversing over all the vertices
             if (!vis[it->first]) {
-                vis[it->first] = true;
+                vis[it->first] = true;          //if current vertex in not visited, then mark it as visited and start dfs from this vertex as source
                 n++;
                 s.push(it->first);
                 while (!s.empty()) {
@@ -116,7 +127,7 @@ public:
                 }
             }
         }
-        return n;
+        return n;                               //finally return the number of connected components
     }
 
     bool cyclic() {
