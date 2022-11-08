@@ -7,7 +7,7 @@
 #include <vector>   
 
 template <typename T>       
-class graph {
+class graph {                                   //Class of unweighted undirected graph
 public:
     int number_of_edges = 0;                    //number of edges stores the total edges in the graph
     std::map<T, std::vector<T>> adj;            //adj is the adjacency list of the graph
@@ -189,7 +189,7 @@ public:
 };
 
 template <typename T>
-class digraph {
+class digraph {                                                 //Class of directed graph
         //Standard dfs function used for getting the finishing time of all the vertices a
         void dfs(T node, std::stack<T> &st, std::map<T, bool> &vis, std::map<T, std::vector<T>> &adj) {
         vis[node] = true;                                       //marking current vertex as visited
@@ -201,7 +201,7 @@ class digraph {
         st.push(node);                                          //and storing their time in the stack
     }
 
-    //Standard dfs functio applied on the transpose graph of the original graph for getting the SCCs of the graph
+    //Standard dfs function applied on the transpose graph of the original graph for getting the SCCs of the graph
     void revDfs(int node, std::map<T, bool> &vis, std::map<T, std::vector<T>> &transpose, std::vector<T> &SCC) {
         SCC.push_back(node);
         vis[node] = true;
@@ -237,6 +237,11 @@ public:
     //out_degree stores the outdegree of a given vertex
     int out_degree(T u) {
         return adj[u].size();
+    }
+
+    //in_degree stores the indegree of a given vertex
+    int in_degree(T u) {
+        return in_degree[u];
     }
 
     //This function removes a given vertex from the graph.
@@ -300,7 +305,8 @@ public:
         return bfs;                                                 //finally return the BFS traversal
     }
 
-    std::vector<T> dfs(T u) {                                       //It performs Depth First Search traversal on given graph starting from given source vertex u
+    //It performs Depth First Search traversal on given graph starting from given source vertex u
+    std::vector<T> dfs(T u) {                                       
         std::vector<T> dfs;                                         //It stores the DFS traversal of the given graph
         std::map<T, bool> vis;                                      //vis map marks visited vertices as true
         vis[u] = true;                                              //marking source vertex u as visited
@@ -396,53 +402,71 @@ public:
 };
 
 template <typename T>
-class wgraph {
+class wgraph {                                                          //Class of weighted undirected graph
 public:
-    std::map<T, std::vector<std::pair<T, int>>> adj;
-    int number_of_edges = 0;
+    std::map<T, std::vector<std::pair<T, int>>> adj;                    //adj is the adjacency list of the graph
+    int number_of_edges = 0;                                            //number of edges stores the total edges in the graph
 
-    void add_edge(T v, T w, int k = 1) {
-        adj[v].push_back({w, k});
-        adj[w].push_back({v, k});
+    void add_edge(T v, T w, int k = 1) {                                //This function adds an edge between given two vertices of given weight assuming default edge weight as 1.
+        adj[v].push_back({w, k});                                       //updating the adjacency list of w 
+        adj[w].push_back({v, k});                                       //updating the adjacency list of v                               
     }
 
-    void add_node(T u) {
+    //This function adds an isolated node in the graph
+    void add_node(T u) {                            
         adj[u];
     }
 
+     //It returns the total vertices present in the graph.
+    int number_of_nodes() {
+        return adj.size();
+    }
+
+    //This function removes a given vertex from the graph.
     void remove_node(T u) {
-        number_of_edges -= adj[u].size();
-        for (auto i : adj[u]) {
+        number_of_edges -= adj[u].size();                               //removing all the edges connected to the given vertex
+        for (auto i : adj[u]) {                                         
             int p = 0;
             for (auto it : adj[i.first]) {
                 if (it.first == u) {
-                    adj[i.first].erase(adj[i.first].begin() + p);
+                    adj[i.first].erase(adj[i.first].begin() + p);       //removing the given vertex from the adjacency list of its neighbours
                 }
                 p++;
             }
         }
-        adj.erase(u);
+        adj.erase(u);                                                   //Finally removing the given vertex 
     }
 
+    //This function removes a given edge between two vertices.
     void remove_edge(T u, T v) {
         std::vector<std::pair<T, int>> V1 = adj[u];
         std::vector<std::pair<T, int>> V2 = adj[v];
         int p = 0;
-        for (auto it : V1) {
+        for (auto it : V1) {                                            //searching for vertex v
             if (it.first == v) {
-                adj[u].erase(adj[u].begin() + p);
+                adj[u].erase(adj[u].begin() + p);                       //and then removing vertex v from adjacency list of u
             }
             p++;
         }
 
         p = 0;
-        for (auto it : V2) {
+        for (auto it : V2) {                                            //searching for vertex u
             if (it.first == u) {
-                adj[v].erase(adj[v].begin() + p);
+                adj[v].erase(adj[v].begin() + p);                       //removing vertex v from adjacency list of v
             }
             p++;
         }
-        number_of_edges--;
+        number_of_edges--;                                              //updating the number of edges
+    }
+
+    //It just returns the degree of a given vertex.
+    int degree(T u) {
+        return adj[u].size();
+    }
+
+    //It clears the entire graph i.e. it removes all vertices.
+    void clear() {
+        adj.clear();
     }
 
     std::vector<std::vector<int>> bellman_ford() {
@@ -538,28 +562,46 @@ private:
 };
 
 template <typename T>
-class wdigraph {
+class wdigraph {                                                            //Class of weighted directed graph
 public:
-    std::map<T, std::vector<std::pair<T, int>>> adj;
-    int number_of_edges = 0;
-    std::map<T, int> in_degree;
+    std::map<T, std::vector<std::pair<T, int>>> adj;                        //adj is the adjacency list of the weighted directed graph
+    int number_of_edges = 0;                                                //number of edges stores the total edges in the weighted directed graph
+    std::map<T, int> in_degree;                                             //in_degree stores the indegree of a given vertex
 
+    //This function adds a directed edge from vertex u to vertex v with given weight assuming default edge weight as 0.
     void add_edge(T v, T w, int k = 0) {
-        adj[v].push_back({w, k});
+        adj[v].push_back({w, k});                           
         adj[w];
     }
 
+    //This function adds an isolated node in the weighted directed graph
     void add_node(T u) {
         adj[u];
     }
 
+     //It returns the total vertices present in the graph.
+    int number_of_nodes() {
+        return adj.size();
+    }
+
+     //out_degree stores the outdegree of a given vertex
+    int out_degree(T u) {
+        return adj[u].size();
+    }
+
+    //in_degree stores the indegree of a given vertex
+    int in_degree(T u) {
+        return in_degree[u];
+    }
+
+    //This function removes a given vertex from the graph.
     void remove_node(T u) {
         for (auto &i : adj) {
             if (i.first == u) {
-                std::vector<std::pair<T, int>> V = adj[u];
-                number_of_edges -= V.size();
+                std::vector<std::pair<T, int>> V = adj[u];      
+                number_of_edges -= V.size();                                //removing all the edges connected to the given vertex 
                 for (auto j : V) {
-                    in_degree[j.first]--;
+                    in_degree[j.first]--;                                   //updating the indegree of its neighbours
                 }
                 continue;
             }
@@ -568,27 +610,33 @@ public:
             int p = 0;
             for (auto it : V) {
                 if (it.first == u) {
-                    adj[i.first].erase(adj[i.first].begin() + p);
-                    number_of_edges--;
+                    adj[i.first].erase(adj[i.first].begin() + p);           //removing the given vertex from the adjacency list of its neighbours
+                    number_of_edges--;                                      //again updating the number of edges 
                 }
                 p++;
             }
         }
-        adj.erase(u);
-        in_degree.erase(u);
+        adj.erase(u);                                                       //removing the given vertex from the adjacency list
+        in_degree.erase(u);                                                 //and then updating ther indegree of the removed vertex
     }
 
+    //This function removes the given directed edge between two vertices.
     void remove_edge(T u, T v) {
         std::vector<std::pair<T, int>> V = adj[u];
         int p = 0;
         for (auto it : V) {
             if (it.first == v) {
-                adj[u].erase(adj[u].begin() + p);
-                in_degree[v]--;
-                number_of_edges--;
+                adj[u].erase(adj[u].begin() + p);                           //then, removing v from adjacency list of u
+                in_degree[v]--;                                             //updating the indegree of v
+                number_of_edges--;                                          //finally updating the number of edges.
             }
             p++;
         }
+    }
+
+     //It clears the entire directed graph i.e. it removes all vertices.
+    void clear() {
+        adj.clear();
     }
 
     std::vector<std::vector<int>> bellman_ford() {
