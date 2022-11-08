@@ -6,7 +6,7 @@ Defines container template classes to study graphs in C++
 - Defines several container template classes
 - Data structures for graphs, digraphs and weighted graphs
 - Many standard graph algorithms
-- Nodes can be any built-in data type
+- Nodes can be arbitrary objects
 # Example
 Finds number of connected components in an undirected graph
 ```cpp
@@ -36,11 +36,11 @@ Number of connected components in g are 3
 ```
 For example,
 ```
-% cd "Desktop/3rd Semester/CS201/CS201_Project_Group_1/Code_file_Group_1/Examples"
+% cd Documents/GitHub/Graph-Template-Library/Examples
 ```
 OR
 ```
-% cd Desktop/3rd\ Semester/CS201/CS201_Project_Group_1/Code_file_Group_1/Examples
+% cd "Documents/GitHub/Graph-Template-Library/Examples"
 ```
 ### Compile C++ program
 ```
