@@ -525,6 +525,8 @@ public:
     }
 
     std::map<T, int> dijkstra(T s) {
+        // Initialize the map of distances with infinity (INT_MAX).
+        //ans then set distance of the starting vertex s from itself as 0.
         d.clear();
         p.clear();
         for (auto i : adj) {
@@ -532,9 +534,13 @@ public:
             p[i.first] = T{};
         }
 
+        //Create a min priority queue q of pairs in which the first attribute is distance from s 
+        //and the second attribute is a graph node. Initialize it with {0, s}.
         d[s] = 0;
         std::priority_queue<std::pair<int, T>, std::vector<std::pair<int, T>>, std::greater<std::pair<int, T>>> q;
         q.push({0, s});
+
+        //Extract the v and d_v (distance of v from s)  from the top of the min priority queue q. If the queue is empty, halt and return
         while (!q.empty()) {
             T v = q.top().second;
             int d_v = q.top().first;
@@ -543,6 +549,8 @@ public:
                 continue;
             }
 
+            //For all neighbours e of v, if d[v] + weight of edge {v, e} / (v, e) (for wdigraph) is less than distance of e from s 
+            //then update the distance fo e from s. Push the pair of distance of e from s and e in the priority queue q. Update predecessor of e to v.
             for (auto e : adj[v]) {
                 T to = e.first;
                 int len = e.second;
@@ -554,9 +562,11 @@ public:
                 }
             }
         }
+        //Finally, return d.
         return d;
     }
 
+    //It uses Dijakstra algorithm to calculate shortest path from starting vertex to destination vertex using predecessor map
     std::vector<T> path(T from, T to) {
         dijkstra(from);
         d.clear();
@@ -570,8 +580,8 @@ public:
     }
 
 private:
-    std::map<T, int> d;
-    std::map<T, T> p;
+    std::map<T, int> d;                                                     // map of distances.
+    std::map<T, T> p;                                                       // map of predecessors.
 };
 
 template <typename T>
@@ -699,16 +709,23 @@ public:
     }
 
     std::map<T, int> dijkstra(T s) {
+        // Initialize the map of distances with infinity (INT_MAX).
+        //ans then set distance of the starting vertex s from itself as 0.                      
+
         d.clear();
         p.clear();
         for (auto i : adj) {
             d[i.first] = INT_MAX;
             p[i.first] = T{};
         }
-
+        
+        //Create a min priority queue q of pairs in which the first attribute is distance from s 
+        //and the second attribute is a graph node. Initialize it with {0, s}.
         d[s] = 0;
         std::priority_queue<std::pair<int, T>, std::vector<std::pair<int, T>>, std::greater<std::pair<int, T>>> q;
         q.push({0, s});
+
+        //Extract the v and d_v (distance of v from s)  from the top of the min priority queue q. If the queue is empty, halt and return
         while (!q.empty()) {
             T v = q.top().second;
             int d_v = q.top().first;
@@ -717,6 +734,8 @@ public:
                 continue;
             }
 
+            //For all neighbours e of v, if d[v] + weight of edge {v, e} / (v, e) (for wdigraph) is less than distance of e from s 
+            //then update the distance fo e from s. Push the pair of distance of e from s and e in the priority queue q. Update predecessor of e to v.
             for (auto e : adj[v]) {
                 T to = e.first;
                 int len = e.second;
@@ -728,9 +747,11 @@ public:
                 }
             }
         }
+        //Finally, return d.
         return d;
     }
 
+    //It uses Dijakstra algorithm to calculate shortest path from starting vertex to destination vertex using predecessor map
     std::vector<T> path(T from, T to) {
         dijkstra(from);
         d.clear();
@@ -744,6 +765,6 @@ public:
     }
 
 private:
-    std::map<T, int> d;
-    std::map<T, T> p;
+    std::map<T, int> d;                         // map of distances.
+    std::map<T, T> p;                           // map of predecessors 
 };
