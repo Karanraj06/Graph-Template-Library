@@ -190,16 +190,18 @@ public:
 
 template <typename T>
 class digraph {
+        //Standard dfs function used for getting the finishing time of all the vertices a
         void dfs(T node, std::stack<T> &st, std::map<T, bool> &vis, std::map<T, std::vector<T>> &adj) {
-        vis[node] = true;
-        for (auto it : adj[node]) {
+        vis[node] = true;                                       //marking current vertex as visited
+        for (auto it : adj[node]) { 
             if (!vis[it]) {
                 dfs(it, st, vis, adj);
             }
         }
-        st.push(node);
+        st.push(node);                                          //and storing their time in the stack
     }
 
+    //Standard dfs functio applied on the transpose graph of the original graph for getting the SCCs of the graph
     void revDfs(int node, std::map<T, bool> &vis, std::map<T, std::vector<T>> &transpose, std::vector<T> &SCC) {
         SCC.push_back(node);
         vis[node] = true;
@@ -386,6 +388,7 @@ public:
         return SCCsOfGraph;                            //finally return the SCCsOfGraph vector   
     } 
 
+    //It returns the total number of strongly connected components (SCCs) present in the directed graph.
     int number_of_SCCs() {
         std::vector<std::vector<T>> SCCs = this->SCCs();
         return SCCs.size();
