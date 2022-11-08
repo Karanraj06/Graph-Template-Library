@@ -19,9 +19,9 @@ public:
 
     // This function adds an edge between given two vertices.
     void add_edge(T u, T v) {
-        number_of_edges++;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        number_of_edges++;                      //updating the number of edges
+        adj[u].push_back(v);                    //updating the adjacency list of v
+        adj[v].push_back(u);                    //updating the adjacency list of u
     }
 
     // It returns the total vertices present in the graph.
@@ -109,7 +109,7 @@ public:
         int n(0);                               // n stores the number of connected components in the graph
         std::map<T, bool> vis;                  // vis map marks visited vertices as true
         std::stack<T> s;                        // s is the exploration stack
-        for (auto it = adj.begin(); it != adj.end(); it++) {    //t raversing over all the vertices
+        for (auto it = adj.begin(); it != adj.end(); it++) {    // traversing over all the vertices
             if (!vis[it->first]) {
                 vis[it->first] = true;          // if current vertex in not visited, then mark it as visited and start dfs from this vertex as source
                 n++;
@@ -133,7 +133,8 @@ public:
     bool cyclic() {                         
         std::map<T, bool> vis;
         std::map<T, T> p;
-
+        
+        // Performs DFS returns true if it encounters a node that has already been visited
         std::function<bool(T, T)> dfs = [&](T v, T _p) {
             vis[v] = true;
             for (auto i : adj[v]) {
@@ -148,7 +149,8 @@ public:
             }
             return false;
         };
-
+        
+        // Perform DFS on all unvisited nodes and return true if a cycle is found
         for (auto i : adj) {
             if (!vis[i.first] && dfs(i.first, p[i.first])) {
                 return true;
@@ -157,14 +159,17 @@ public:
         return false;
     }
 
+    // Uses BFS and two-colourable property of bipartite graph
     bool is_bipartite() {
+        // Flag variable stores the final result
         bool flag = true;
         std::map<T, int> side;
         for (auto i : adj) {
             side[i.first] = -1;
         }
         std::queue<T> q;
-
+        
+        // For all vertices if not visited yet perform BFS
         for (auto i : adj) {
             if (side[i.first] == -1) {
                 q.push(i.first);
@@ -173,16 +178,19 @@ public:
                     T v = q.front();
                     q.pop();
                     for (auto u : adj[v]) {
+                        // Assign the opposite colours to all unvisited neighbours
                         if (side[u] == -1) {
                             side[u] = side[v] ^ 1;
                             q.push(u);
                         } else {
+                            // If the neighbour is already visited check whether it has the opposite colour or not
                             flag &= side[u] != side[v];
                         }
                     }
                 }
             }
         }
+        // Finally return flag
         return flag;
     }
 };
@@ -297,7 +305,7 @@ public:
             for (auto u : adj[v]) {                                  // pushing all the non-visited neighbours of the popped vertex in the queue                                    
                 if (!vis[u]) {
                     q.push(u);
-                    vis[u] = true;                                  // and marking them as visited
+                    vis[u] = true;                                   // and marking them as visited
                 }
             }
         }
@@ -326,10 +334,13 @@ public:
     }
 
     // This function returns true if the graph is cyclic
+    // It uses topological_sort to check for cycles
     bool cyclic() {
         return topological_sort().size() != adj.size();
     }
-
+    
+    // It uses Kahn's algorithm to find a topological sort
+    // If the graph is not a DAG it return an empty list 
     std::vector<T> topological_sort() {
         std::vector<T> ans;
         std::map<T, int> inDegree = in_degree;
@@ -356,9 +367,7 @@ public:
             return ans;
         }
         return {};
-    }
-
-   
+    }   
 
 
     // This function prints all the SCCs in the given directed graph using Kosaraju's Algorithm
@@ -468,14 +477,18 @@ public:
         adj.clear();
     }
 
+    //This function finds shortest distances from src to all other vertices, it also detects negative weight cycle
     std::vector<std::vector<int>> bellman_ford() {
-        std::vector<std::vector<int>> distance;
+        std::vector<std::vector<int>> distance;                         //it stores the shortest distances from source vertex to all other vertices 
         for (auto it2 : adj) {
             std::map<T, int> dist;
+
+            //Initialize distances from src to all other vertices as INFINITE
             for (auto it1 : adj) {
                 dist[it1.first] = INT_MAX;
             }
 
+            //Relax all edges |V| - 1 times. A simple shortest path from src to any other vertex can have at-most |V| - 1 edges
             dist[it2.first] = 0;
             for (int i = 0; i < adj.size() - 1; i++) {
                 for (auto it : adj) {
@@ -495,22 +508,25 @@ public:
                 dist_.push_back(it.second);
             }
 
+            //check for negative-weight cycles.  The above step guarantees shortest distances if graph doesn't contain negative weight cycle.  If we get a shorter path, then there is a cycle.
             for (auto it : adj) {
                 for (auto it1 = it.second.begin(); it1 != it.second.end(); it1++) {
                     T u = it.first;
                     T v = it1->first;
                     int wt = it1->second;
                     if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {
-                        return {{-1}};
+                        return {{-1}};                                  // If negative cycle is detected, simply return {{-1}}
                     }
                 }
             }
-            distance.push_back(dist_);
+            distance.push_back(dist_);                                  //finally return the distance vector
         }
         return distance;
     }
 
     std::map<T, int> dijkstra(T s) {
+        // Initialize the map of distances with infinity (INT_MAX).
+        //ans then set distance of the starting vertex s from itself as 0.
         d.clear();
         p.clear();
         for (auto i : adj) {
@@ -518,9 +534,13 @@ public:
             p[i.first] = T{};
         }
 
+        //Create a min priority queue q of pairs in which the first attribute is distance from s 
+        //and the second attribute is a graph node. Initialize it with {0, s}.
         d[s] = 0;
         std::priority_queue<std::pair<int, T>, std::vector<std::pair<int, T>>, std::greater<std::pair<int, T>>> q;
         q.push({0, s});
+
+        //Extract the v and d_v (distance of v from s)  from the top of the min priority queue q. If the queue is empty, halt and return
         while (!q.empty()) {
             T v = q.top().second;
             int d_v = q.top().first;
@@ -529,6 +549,8 @@ public:
                 continue;
             }
 
+            //For all neighbours e of v, if d[v] + weight of edge {v, e} / (v, e) (for wdigraph) is less than distance of e from s 
+            //then update the distance fo e from s. Push the pair of distance of e from s and e in the priority queue q. Update predecessor of e to v.
             for (auto e : adj[v]) {
                 T to = e.first;
                 int len = e.second;
@@ -540,9 +562,11 @@ public:
                 }
             }
         }
+        //Finally, return d.
         return d;
     }
 
+    //It uses Dijakstra algorithm to calculate shortest path from starting vertex to destination vertex using predecessor map
     std::vector<T> path(T from, T to) {
         dijkstra(from);
         d.clear();
@@ -556,8 +580,8 @@ public:
     }
 
 private:
-    std::map<T, int> d;
-    std::map<T, T> p;
+    std::map<T, int> d;                                                     // map of distances.
+    std::map<T, T> p;                                                       // map of predecessors.
 };
 
 template <typename T>
@@ -569,8 +593,8 @@ public:
 
     // This function adds a directed edge from vertex u to vertex v with given weight assuming default edge weight as 0.
     void add_edge(T v, T w, int k = 0) {
-        adj[v].push_back({w, k});                           
-        adj[w];
+        adj[v].push_back({w, k});                                           //updating the adjacency list of v by adding edge of weight k              
+        adj[w];                                                             //creating the adjacency list of w
     }
 
     // This function adds an isolated node in the weighted directed graph
@@ -638,14 +662,18 @@ public:
         adj.clear();
     }
 
+    //This function finds shortest distances from src to all other vertices, it also detects negative weight cycle
     std::vector<std::vector<int>> bellman_ford() {
-        std::vector<std::vector<int>> distance;
+        std::vector<std::vector<int>> distance;                  //it stores the shortest distances from source vertex to all other vertices 
+
         for (auto it2 : adj) {
             std::map<T, int> dist;
-            for (auto it1 : adj) {
+            //Initialize distances from src to all other vertices as INFINITE
+            for (auto it1 : adj) {                                          
                 dist[it1.first] = INT_MAX;
             }
 
+            //Relax all edges |V| - 1 times. A simple shortest path from src to any other vertex can have  at-most |V| - 1 edges             
             dist[it2.first] = 0;
             for (int i = 0; i < adj.size() - 1; i++) {
                 for (auto it : adj) {
@@ -664,33 +692,40 @@ public:
             for (auto it : dist) {
                 dist_.push_back(it.second);
             }
-
+            //check for negative-weight cycles. The above step guarantees shortest distances if graph doesn't contain negative weight cycle. If we get a shorter path, then there is a cycle.
             for (auto it : adj) {
                 for (auto it1 = it.second.begin(); it1 != it.second.end(); it1++) {
                     T u = it.first;
                     T v = it1->first;
                     int wt = it1->second;
                     if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {
-                        return {{-1}};
+                        return {{-1}};                  // If negative cycle is detected, simply return {{-1}}
                     }
                 }
             }
             distance.push_back(dist_);
         }
-        return distance;
+        return distance;                                //finally return the distance vector
     }
 
     std::map<T, int> dijkstra(T s) {
+        // Initialize the map of distances with infinity (INT_MAX).
+        //ans then set distance of the starting vertex s from itself as 0.                      
+
         d.clear();
         p.clear();
         for (auto i : adj) {
             d[i.first] = INT_MAX;
             p[i.first] = T{};
         }
-
+        
+        //Create a min priority queue q of pairs in which the first attribute is distance from s 
+        //and the second attribute is a graph node. Initialize it with {0, s}.
         d[s] = 0;
         std::priority_queue<std::pair<int, T>, std::vector<std::pair<int, T>>, std::greater<std::pair<int, T>>> q;
         q.push({0, s});
+
+        //Extract the v and d_v (distance of v from s)  from the top of the min priority queue q. If the queue is empty, halt and return
         while (!q.empty()) {
             T v = q.top().second;
             int d_v = q.top().first;
@@ -699,6 +734,8 @@ public:
                 continue;
             }
 
+            //For all neighbours e of v, if d[v] + weight of edge {v, e} / (v, e) (for wdigraph) is less than distance of e from s 
+            //then update the distance fo e from s. Push the pair of distance of e from s and e in the priority queue q. Update predecessor of e to v.
             for (auto e : adj[v]) {
                 T to = e.first;
                 int len = e.second;
@@ -710,9 +747,11 @@ public:
                 }
             }
         }
+        //Finally, return d.
         return d;
     }
 
+    //It uses Dijakstra algorithm to calculate shortest path from starting vertex to destination vertex using predecessor map
     std::vector<T> path(T from, T to) {
         dijkstra(from);
         d.clear();
@@ -726,6 +765,6 @@ public:
     }
 
 private:
-    std::map<T, int> d;
-    std::map<T, T> p;
+    std::map<T, int> d;                         // map of distances.
+    std::map<T, T> p;                           // map of predecessors 
 };
