@@ -133,7 +133,8 @@ public:
     bool cyclic() {                         
         std::map<T, bool> vis;
         std::map<T, T> p;
-
+        
+        // Performs DFS returns true if it encounters a node that has already been visited
         std::function<bool(T, T)> dfs = [&](T v, T _p) {
             vis[v] = true;
             for (auto i : adj[v]) {
@@ -148,7 +149,8 @@ public:
             }
             return false;
         };
-
+        
+        // Perform DFS on all unvisited nodes and return true if a cycle is found
         for (auto i : adj) {
             if (!vis[i.first] && dfs(i.first, p[i.first])) {
                 return true;
@@ -157,14 +159,17 @@ public:
         return false;
     }
 
+    // Uses BFS and two-colourable property of bipartite graph
     bool is_bipartite() {
+        // Flag variable stores the final result
         bool flag = true;
         std::map<T, int> side;
         for (auto i : adj) {
             side[i.first] = -1;
         }
         std::queue<T> q;
-
+        
+        // For all vertices if not visited yet perform BFS
         for (auto i : adj) {
             if (side[i.first] == -1) {
                 q.push(i.first);
@@ -173,16 +178,19 @@ public:
                     T v = q.front();
                     q.pop();
                     for (auto u : adj[v]) {
+                        // Assign the opposite colours to all unvisited neighbours
                         if (side[u] == -1) {
                             side[u] = side[v] ^ 1;
                             q.push(u);
                         } else {
+                            // If the neighbour is already visited check whether it has the opposite colour or not
                             flag &= side[u] != side[v];
                         }
                     }
                 }
             }
         }
+        // Finally return flag
         return flag;
     }
 };
@@ -326,10 +334,13 @@ public:
     }
 
     // This function returns true if the graph is cyclic
+    // It uses topological_sort to check for cycles
     bool cyclic() {
         return topological_sort().size() != adj.size();
     }
-
+    
+    // It uses Kahn's algorithm to find a topological sort
+    // If the graph is not a DAG it return an empty list 
     std::vector<T> topological_sort() {
         std::vector<T> ans;
         std::map<T, int> inDegree = in_degree;
