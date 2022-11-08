@@ -160,30 +160,30 @@ public:
     bool is_bipartite() {
         bool flag = true;
         std::map<T, int> side;
+        for (auto i : adj) {
+            side[i.first] = -1;
+        }
         std::queue<T> q;
 
         for (auto i : adj) {
-            if (side[i.first] == 0) {
+            if (side[i.first] == -1) {
                 q.push(i.first);
-                side[i.first] = 1;
+                side[i.first] = 0;
                 while (!q.empty()) {
                     T v = q.front();
                     q.pop();
                     for (auto u : adj[v]) {
-                        if (side[u] == 0) {
-                            side[u] = !side[v];
+                        if (side[u] == -1) {
+                            side[u] = side[v] ^ 1;
                             q.push(u);
                         } else {
                             flag &= side[u] != side[v];
-                            if (!flag) {
-                                return false;
-                            }
                         }
                     }
                 }
             }
         }
-        return true;
+        return flag;
     }
 };
 
