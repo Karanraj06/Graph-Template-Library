@@ -19,9 +19,9 @@ public:
 
     //This function adds an edge between given two vertices.
     void add_edge(T u, T v) {
-        number_of_edges++;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        number_of_edges++;                      //updating the number of edges
+        adj[u].push_back(v);                    //updating the adjacency list of v
+        adj[v].push_back(u);                    //updating the adjacency list of u
     }
 
     //It returns the total vertices present in the graph.
@@ -570,8 +570,8 @@ public:
 
     //This function adds a directed edge from vertex u to vertex v with given weight assuming default edge weight as 0.
     void add_edge(T v, T w, int k = 0) {
-        adj[v].push_back({w, k});                           
-        adj[w];
+        adj[v].push_back({w, k});                                           //updating the adjacency list of v by adding edge of weight k              
+        adj[w];                                                             //creating the adjacency list of w
     }
 
     //This function adds an isolated node in the weighted directed graph
