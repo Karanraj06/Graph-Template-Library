@@ -7,36 +7,36 @@
 #include <vector>   
 
 template <typename T>       
-class graph {                                   //Class of unweighted undirected graph
+class graph {                                   // Class of unweighted undirected graph
 public:
-    int number_of_edges = 0;                    //number of edges stores the total edges in the graph
-    std::map<T, std::vector<T>> adj;            //adj is the adjacency list of the graph
+    int number_of_edges = 0;                    // number of edges stores the total edges in the graph
+    std::map<T, std::vector<T>> adj;            // adj is the adjacency list of the graph
 
-    //This function adds an isolated node in the graph
+    // This function adds an isolated node in the graph
     void add_node(T u) {                           
         adj[u];
     }
 
-    //This function adds an edge between given two vertices.
+    // This function adds an edge between given two vertices.
     void add_edge(T u, T v) {
         number_of_edges++;
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
 
-    //It returns the total vertices present in the graph.
+    // It returns the total vertices present in the graph.
     int number_of_nodes() {
         return adj.size();
     }
 
-    //This function removes a given vertex from the graph.
+    // This function removes a given vertex from the graph.
     void remove_node(T u) {
         if (adj.find(u) != adj.end()) {
-            number_of_edges -= adj[u].size();       //removing all the edges connected to the given vertex 
-            for (auto i : adj[u]) {                 //removing the given vertex from the adjacency list of its neighbours
+            number_of_edges -= adj[u].size();       // removing all the edges connected to the given vertex 
+            for (auto i : adj[u]) {                 // removing the given vertex from the adjacency list of its neighbours
                 adj[i].erase(find(adj[i].begin(), adj[i].end(), u));
             }
-            adj.erase(u);                           //Finally removing the given vertex 
+            adj.erase(u);                           // Finally removing the given vertex 
         }
     }
 
