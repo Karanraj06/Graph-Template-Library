@@ -54,11 +54,13 @@ public:
 
     // It just returns the degree of a given vertex.
     int degree(T u) {
-        return adj[u].size();
+        // return adj[u].size();
+        return adj.find(u) != adj.end() ? adj[u].size() : -1;
     }
 
     // It clears the entire graph i.e. it removes all vertices.
     void clear() {
+        number_of_edges = 0;
         adj.clear();
     }
 
@@ -221,7 +223,7 @@ class digraph {                                                 // Class of dire
 public:
     int number_of_edges = 0;                    // number of edges stores the total edges in the directed graph
     std::map<T, std::vector<T>> adj;            // adj is the adjacency list of the directed graph
-    std::map<T, int> in_degree;                 // in_degree stores the indegree of a given vertex
+    std::map<T, int> _in_degree;                 // _in_degree stores the indegree of a given vertex
 
     // This function adds an isolated node in the directed graph
     void add_node(T u) {
@@ -233,7 +235,7 @@ public:
         number_of_edges++;                      // updating the number of edges
         adj[u].push_back(v);                    // updating the adjacency list of u
         adj[v];                                 // forming empty adjacency list for v
-        in_degree[v]++;                         // updating indegree of v
+        _in_degree[v]++;                         // updating indegree of v
     }
 
     // It returns the total vertices present in the directed graph.
@@ -243,7 +245,12 @@ public:
 
     // out_degree stores the outdegree of a given vertex
     int out_degree(T u) {
-        return adj[u].size();
+        // return adj[u].size();
+        return adj.find(u) != adj.end() ? adj[u].size() : -1;
+    }
+
+    int in_degree(T u) {
+        return adj.find(u) != adj.end() ? _in_degree[u] : -1;
     }
 
     // This function removes a given vertex from the graph.
@@ -253,7 +260,7 @@ public:
                 if (i.first == u) {
                     number_of_edges -= i.second.size();                // removing all the edges connected to the given vertex 
                     for (auto j : i.second) {                          
-                        in_degree[j]--;                                // updating the indegree of its neighbours
+                        _in_degree[j]--;                                // updating the indegree of its neighbours
                     }
                     continue;
                 }
@@ -265,7 +272,7 @@ public:
                 }
             }
             adj.erase(u);                                           // removing the given vertex from the adjacency list
-            in_degree.erase(u);                                     // and then updating ther indegree of the removed vertex
+            _in_degree.erase(u);                                     // and then updating ther indegree of the removed vertex
         }
     }
     
@@ -275,7 +282,7 @@ public:
             auto it = find(adj[u].begin(), adj[u].end(), v);
             if (it != adj[u].end()) {                               // if vertex v is also present in the graph
                 adj[u].erase(it);                                   // then, removing v from adjacency list of u
-                in_degree[v]--;                                     // updating the indegree of v
+                _in_degree[v]--;                                     // updating the indegree of v
                 number_of_edges--;                                  // finally updating the number of edges.
             }
         }
@@ -283,6 +290,8 @@ public:
 
      // It clears the entire directed graph i.e. it removes all vertices.
     void clear() {
+        number_of_edges = 0;
+        _in_degree.clear();
         adj.clear();
     }
 
@@ -338,7 +347,7 @@ public:
     // If the graph is not a DAG it return an empty list 
     std::vector<T> topological_sort() {
         std::vector<T> ans;
-        std::map<T, int> inDegree = in_degree;
+        std::map<T, int> inDegree = _in_degree;
         std::queue<T> q;
         for (auto i : adj) {
             if (inDegree[i.first] == 0) {
@@ -464,11 +473,13 @@ public:
 
     // It just returns the degree of a given vertex.
     int degree(T u) {
-        return adj[u].size();
+        // return adj[u].size();
+        return adj.find(u) != adj.end() ? adj[u].size() : -1;
     }
 
     // It clears the entire graph i.e. it removes all vertices.
     void clear() {
+        number_of_edges = 0;
         adj.clear();
     }
 
@@ -584,14 +595,14 @@ class wdigraph {                                                            // C
 public:
     std::map<T, std::vector<std::pair<T, int>>> adj;                        // adj is the adjacency list of the weighted directed graph
     int number_of_edges = 0;                                                // number of edges stores the total edges in the weighted directed graph
-    std::map<T, int> in_degree;                                             // in_degree stores the indegree of a given vertex
+    std::map<T, int> _in_degree;                                             // _in_degree stores the indegree of a given vertex
 
     // This function adds a directed edge from vertex u to vertex v with given weight assuming default edge weight as 1
     void add_edge(T v, T w, int k = 1) {
         adj[v].push_back({w, k});                                           //updating the adjacency list of v by adding edge of weight k              
         adj[w];   
         number_of_edges++;  
-        in_degree[w]++;                                                          //creating the adjacency list of w
+        _in_degree[w]++;                                                          //creating the adjacency list of w
     }
 
     // This function adds an isolated node in the weighted directed graph
@@ -606,7 +617,12 @@ public:
 
      // out_degree stores the outdegree of a given vertex
     int out_degree(T u) {
-        return adj[u].size();
+        // return adj[u].size();
+        return adj.find(u) != adj.end() ? adj[u].size() : -1;
+    }
+
+    int in_degree(T u) {
+        return adj.find(u) != adj.end() ? _in_degree[u] : -1;
     }
 
     // This function removes a given vertex from the graph.
@@ -616,7 +632,7 @@ public:
                 std::vector<std::pair<T, int>> V = adj[u];      
                 number_of_edges -= V.size();                                // removing all the edges connected to the given vertex 
                 for (auto j : V) {
-                    in_degree[j.first]--;                                   // updating the indegree of its neighbours
+                    _in_degree[j.first]--;                                   // updating the indegree of its neighbours
                 }
                 continue;
             }
@@ -632,7 +648,7 @@ public:
             }
         }
         adj.erase(u);                                                       // removing the given vertex from the adjacency list
-        in_degree.erase(u);                                                 // and then updating ther indegree of the removed vertex
+        _in_degree.erase(u);                                                 // and then updating ther indegree of the removed vertex
     }
 
     // This function removes the given directed edge between two vertices.
@@ -642,7 +658,7 @@ public:
         for (auto it : V) {
             if (it.first == v) {
                 adj[u].erase(adj[u].begin() + p);                           // then, removing v from adjacency list of u
-                in_degree[v]--;                                             // updating the indegre of v
+                _in_degree[v]--;                                             // updating the indegre of v
                 number_of_edges--;                                          // finally updating the number of edges.
             }
             p++;
@@ -651,6 +667,8 @@ public:
 
      // It clears the entire directed graph i.e. it removes all vertices.
     void clear() {
+        number_of_edges = 0;
+        _in_degree.clear();
         adj.clear();
     }
 
