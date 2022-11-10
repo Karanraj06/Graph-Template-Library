@@ -586,8 +586,8 @@ public:
     int number_of_edges = 0;                                                // number of edges stores the total edges in the weighted directed graph
     std::map<T, int> in_degree;                                             // in_degree stores the indegree of a given vertex
 
-    // This function adds a directed edge from vertex u to vertex v with given weight assuming default edge weight as 0.
-    void add_edge(T v, T w, int k = 0) {
+    // This function adds a directed edge from vertex u to vertex v with given weight assuming default edge weight as 1
+    void add_edge(T v, T w, int k = 1) {
         adj[v].push_back({w, k});                                           //updating the adjacency list of v by adding edge of weight k              
         adj[w];   
         number_of_edges++;  
