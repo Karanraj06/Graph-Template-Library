@@ -246,11 +246,6 @@ public:
         return adj[u].size();
     }
 
-    // in_degree stores the indegree of a given vertex
-    // int in_degree(T u) {
-    //     return in_degree[u];
-    // }
-
     // This function removes a given vertex from the graph.
     void remove_node(T u) {
         if (adj.find(u) != adj.end()) {
@@ -369,7 +364,6 @@ public:
         return {};
     }   
 
-
     // This function prints all the SCCs in the given directed graph using Kosaraju's Algorithm
     std::vector<std::vector<T>> SCCs() {
         std::vector<std::vector<T>> SCCsOfGraph;        // this vector stores all SCC vectors
@@ -417,7 +411,8 @@ public:
 
     void add_edge(T v, T w, int k = 1) {                                // This function adds an edge between given two vertices of given weight assuming default edge weight as 1.
         adj[v].push_back({w, k});                                       // updating the adjacency list of w 
-        adj[w].push_back({v, k});                                       // updating the adjacency list of v                               
+        adj[w].push_back({v, k}); 
+        number_of_edges++;                                      // updating the adjacency list of v                               
     }
 
     // This function adds an isolated node in the graph
@@ -594,7 +589,9 @@ public:
     // This function adds a directed edge from vertex u to vertex v with given weight assuming default edge weight as 0.
     void add_edge(T v, T w, int k = 0) {
         adj[v].push_back({w, k});                                           //updating the adjacency list of v by adding edge of weight k              
-        adj[w];                                                             //creating the adjacency list of w
+        adj[w];   
+        number_of_edges++;  
+        in_degree[w]++;                                                          //creating the adjacency list of w
     }
 
     // This function adds an isolated node in the weighted directed graph
@@ -611,11 +608,6 @@ public:
     int out_degree(T u) {
         return adj[u].size();
     }
-
-    // in_degree stores the indegree of a given vertex
-    // int in_degree(T u) {
-    //     return in_degree[u];
-    // }
 
     // This function removes a given vertex from the graph.
     void remove_node(T u) {
@@ -650,7 +642,7 @@ public:
         for (auto it : V) {
             if (it.first == v) {
                 adj[u].erase(adj[u].begin() + p);                           // then, removing v from adjacency list of u
-                in_degree[v]--;                                             // updating the indegree of v
+                in_degree[v]--;                                             // updating the indegre of v
                 number_of_edges--;                                          // finally updating the number of edges.
             }
             p++;
