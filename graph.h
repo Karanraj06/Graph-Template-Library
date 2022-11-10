@@ -247,9 +247,9 @@ public:
     }
 
     // in_degree stores the indegree of a given vertex
-    int in_degree(T u) {
-        return in_degree[u];
-    }
+    // int in_degree(T u) {
+    //     return in_degree[u];
+    // }
 
     // This function removes a given vertex from the graph.
     void remove_node(T u) {
@@ -613,9 +613,9 @@ public:
     }
 
     // in_degree stores the indegree of a given vertex
-    int in_degree(T u) {
-        return in_degree[u];
-    }
+    // int in_degree(T u) {
+    //     return in_degree[u];
+    // }
 
     // This function removes a given vertex from the graph.
     void remove_node(T u) {
