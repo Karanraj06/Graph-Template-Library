@@ -7,7 +7,7 @@ Condition in the Problem: Note that you only take a snake or ladder at most once
 This problem is solved using the BFS algorithm(considering the board as a digraph)implemented by using the library "graph.h"
 */
 
-//================================================SOLUTION==================================================================
+// ================================================ SOLUTION ==================================================================
 
 #include <iostream>
 #include <queue>
