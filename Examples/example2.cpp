@@ -1,8 +1,9 @@
 #include <iostream>
 #include "graph.h"
 
-int main()
-{
+using namespace std;
+
+int main() {
     graph<int> g;
     g.add_edge(0, 1);
     g.add_edge(0, 4);
@@ -18,27 +19,24 @@ int main()
 
     g.add_node(9);
 
-    std::vector<int> V1 = g.dfs(0);
-    std::vector<int> V2 = g.bfs(0);
-    std::cout << "The DFS Traversal is : ";
-    for (auto it : V1)
-    {
-        std::cout << it << " ";
+    vector<int> V1 = g.dfs(0);
+    vector<int> V2 = g.bfs(0);
+    cout << "The DFS Traversal is: ";
+    for (auto it : V1) {
+        cout << it << " ";
     }
-    std::cout << std::endl;
-    std::cout << "The BFS Traversal is : ";
-    for (auto it : V2)
-    {
-        std::cout << it << " ";
-    }
-    std::cout << std::endl;
+    cout << "\n";
 
-    if (g.cyclic())
-    {
-        std::cout<<"Graph has atleast one cycle."<<std::endl;
+    cout << "The BFS Traversal is: ";
+    for (auto it : V2) {
+        cout << it << " ";
     }
-    else{
-        std::cout<<"Graph doesn't have a cycle"<<std::endl;
+    cout << "\n";
+
+    if (g.cyclic()) {
+        cout << "Graph has atleast one cycle" << "\n";
+    } else {
+        cout << "Graph doesn't have a cycle" << "\n";
     }
     return 0;
 }

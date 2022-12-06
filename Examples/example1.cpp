@@ -1,6 +1,8 @@
 #include <iostream>
 #include "graph.h"
 
+using namespace std;
+
 int main() {
     graph<int> g;
     g.add_edge(0, 1);
@@ -17,24 +19,18 @@ int main() {
 
     g.add_node(9);
 
-    
-    std::cout<<"The Number of Nodes is : "<<g.number_of_nodes()<<std::endl;
-    std::cout<<"The Number of Edges is : "<<g.number_of_edges<<std::endl;
-    std::cout<<"The Number of Connected Components is : "<<g.number_of_connected_components()<<std::endl;
-    std::cout<<"The Degree of 4 is : "<<g.degree(4)<<std::endl;
-    std::map<int,std::vector<int>>M= g.adj;
-    std::cout<<"\n";
-    std::cout<<"The Adjacency List is : "<<std::endl;
-    
-    for(auto it:g.adj){
-        std::cout<<it.first<<" : ";
-        for(auto i:it.second){
-            std::cout<<i<<" ";
+    cout << "The Number of Nodes is: " << g.number_of_nodes() << "\n";
+    cout << "The Number of Edges is: " << g.number_of_edges << "\n";
+    cout << "The Number of Connected Components is: " << g.number_of_connected_components() << "\n";
+    cout << "The Degree of 4 is: " << g.degree(4) << "\n";
+    cout << "The Adjacency List is: " << endl;
+
+    for (auto it : g.adj) {
+        cout << it.first << ": ";
+        for (auto i : it.second) {
+            cout << i << " ";
         }
-        std::cout<<std::endl;
+        cout << "\n";
     }
-
-
-    
     return 0;
 }

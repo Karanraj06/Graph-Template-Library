@@ -1,8 +1,9 @@
 #include <iostream>
 #include "graph.h"
 
-int main()
-{
+using namespace std;
+
+int main() {
     digraph<int> g;
     g.add_edge(1, 3);
     g.add_edge(2, 0);
@@ -11,14 +12,11 @@ int main()
     g.add_edge(4, 1);
     g.add_edge(4, 2);
 
-    
-    std::vector<int> V = g.topological_sort();
-    std::cout << "The Topological sort is : ";
-    for (auto it : V)
-    {
-        std::cout << it << " ";
+    vector<int> V = g.topological_sort();
+    cout << "The Topological sort is: ";
+    for (auto it : V) {
+        cout << it << " ";
     }
-    std::cout << std::endl;
-    
+    cout << "\n";
     return 0;
 }

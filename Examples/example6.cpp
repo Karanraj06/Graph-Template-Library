@@ -1,47 +1,38 @@
 #include <iostream>
 #include "graph.h"
 
-int main()
-{
+using namespace std;
+
+int main() {
     wdigraph<int> g;
     g.add_edge(0, 1, -5);
     g.add_edge(0, 3, 3);
     g.add_edge(0, 2, 2);
     g.add_edge(2, 3, 1);
     g.add_edge(1, 2, 4);
-    
-    std::cout<<"By Bellman Ford Algorithm.... "<<std::endl;
-    std::cout << std::endl;
 
-    std::vector<std::vector<int>> V = g.bellman_ford();
-    std::cout << "Shortest Distance From all nodes to all other nodes : " << std::endl;
+    cout << "By Bellman Ford Algorithm ..." << "\n";
 
-    std::cout << std::endl;
-    std::cout << "  ";
-    for (auto i : g.adj)
-    {
-        std::cout << i.first << " ";
+    vector<vector<int>> V = g.bellman_ford();
+    cout << "Shortest distance from all nodes to all other nodes: " << "\n";
+
+    for (auto i : g.adj) {
+        cout << i.first << " ";
     }
-    std::cout << std::endl;
+    cout << "\n";
+
     auto it = g.adj.begin();
-    for (auto i : V)
-    {
-        std::cout << it->first << " ";
-        for (auto j : i)
-        {
-            if (j == INT_MAX)
-            {
-                std::cout << "N ";
-            }
-            else
-            {
-                std::cout << j << " ";
+    for (auto i : V) {
+        cout << it->first << " ";
+        for (auto j : i) {
+            if (j == INT_MAX) {
+                cout << "∞ ";
+            } else {
+                cout << j << " ";
             }
         }
-        std::cout << std::endl;
+        cout << "\n";
         it++;
     }
-    std::cout << std::endl;
-
     return 0;
 }

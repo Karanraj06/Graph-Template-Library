@@ -1,8 +1,9 @@
 #include <iostream>
 #include "graph.h"
 
-int main()
-{
+using namespace std;
+
+int main() {
     wgraph<char> g;
     g.add_edge('A', 'B', 4);
     g.add_edge('B', 'D', 9);
@@ -14,23 +15,19 @@ int main()
     g.add_edge('E', 'D', 13);
     g.add_edge('E', 'B', 7);
 
-    std::cout << "By Dijkshtra's Algorithm.... " << std::endl;
-    std::cout << std::endl;
+    cout << "By Dijkshtra's Algorithm ..." << "\n";
 
-    std::map<char, int> V = g.dijkstra('A');
-    std::cout << "Shortest Distance From A to all other nodes : " << std::endl;
-    for (auto it : V)
-    {
-        std::cout << it.first << " : " << it.second << std::endl;
+    map<char, int> V = g.dijkstra('A');
+    cout << "Shortest distance from vertex 'A' to all other nodes: " << "\n";
+    for (auto it : V) {
+        cout << it.first << ": " << it.second << "\n";
     }
-    std::cout<<std::endl;
-    std::vector<char> V1 = g.path('A', 'F');
-    std::cout << "Shortest Path From A to F is : " ;
-    for (auto it : V1)
-    {
-        std::cout<<it<<" ";
-    }
-    std::cout<<std::endl;
 
+    vector<char> V1 = g.path('A', 'F');
+    cout << "Shortest path from 'A' to 'F' is: ";
+    for (auto it : V1) {
+        cout << it << " ";
+    }
+    cout << "\n";
     return 0;
 }

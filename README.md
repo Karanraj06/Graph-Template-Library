@@ -28,29 +28,3 @@ Output
 ```
 Number of connected components in g are 3
 ```
-# Test
-## Terminal commands to compile and run C++ program
-### Change directory to current working directory
-```
-% cd file_path
-```
-For example,
-```
-% cd Documents/GitHub/Graph-Template-Library/Examples
-```
-OR
-```
-% cd "Documents/GitHub/Graph-Template-Library/Examples"
-```
-### Compile C++ program
-```
-% g++ -std=c++20 file_name
-```
-For example,
-```
-% g++ -std=c++20 example1.cpp
-```
-### Run C++ program
-```
-% ./a.out
-```
