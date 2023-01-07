@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     wgraph<char> g;
     g.add_edge('A', 'B', 4);
     g.add_edge('B', 'D', 9);
@@ -15,17 +16,21 @@ int main() {
     g.add_edge('E', 'D', 13);
     g.add_edge('E', 'B', 7);
 
-    cout << "By Dijkshtra's Algorithm ..." << "\n";
+    cout << "By Dijkshtra's Algorithm ..."
+         << "\n";
 
     map<char, int> V = g.dijkstra('A');
-    cout << "Shortest distance from vertex 'A' to all other nodes: " << "\n";
-    for (auto it : V) {
+    cout << "Shortest distance from vertex 'A' to all other nodes: "
+         << "\n";
+    for (auto it : V)
+    {
         cout << it.first << ": " << it.second << "\n";
     }
 
     vector<char> V1 = g.path('A', 'F');
     cout << "Shortest path from 'A' to 'F' is: ";
-    for (auto it : V1) {
+    for (auto it : V1)
+    {
         cout << it << " ";
     }
     cout << "\n";

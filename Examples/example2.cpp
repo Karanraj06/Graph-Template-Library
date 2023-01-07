@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     graph<int> g;
     g.add_edge(0, 1);
     g.add_edge(0, 4);
@@ -22,21 +23,28 @@ int main() {
     vector<int> V1 = g.dfs(0);
     vector<int> V2 = g.bfs(0);
     cout << "The DFS Traversal is: ";
-    for (auto it : V1) {
+    for (auto it : V1)
+    {
         cout << it << " ";
     }
     cout << "\n";
 
     cout << "The BFS Traversal is: ";
-    for (auto it : V2) {
+    for (auto it : V2)
+    {
         cout << it << " ";
     }
     cout << "\n";
 
-    if (g.cyclic()) {
-        cout << "Graph has atleast one cycle" << "\n";
-    } else {
-        cout << "Graph doesn't have a cycle" << "\n";
+    if (g.cyclic())
+    {
+        cout << "Graph has atleast one cycle"
+             << "\n";
+    }
+    else
+    {
+        cout << "Graph doesn't have a cycle"
+             << "\n";
     }
     return 0;
 }

@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     wdigraph<int> g;
 
     g.add_edge(1, 0, 5);

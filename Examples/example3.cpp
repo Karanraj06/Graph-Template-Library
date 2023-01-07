@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     graph<int> g;
     g.add_edge(0, 1);
     g.add_edge(0, 3);
@@ -13,30 +14,41 @@ int main() {
     g.add_edge(3, 4);
     g.add_edge(4, 1);
 
-    cout << "The Adjacency List is: " << "\n";
+    cout << "The Adjacency List is: "
+         << "\n";
 
-    for (auto it : g.adj) {
+    for (auto it : g.adj)
+    {
         cout << it.first << ": ";
-        for (auto i : it.second) {
+        for (auto i : it.second)
+        {
             cout << i << " ";
         }
         cout << "\n";
     }
     cout << "\n";
 
-    if (g.is_bipartite()) {
-        cout << "The Graph is Bipartite" << "\n";
-    } else {
-        cout << "The Graph is not Bipartite" << "\n";
+    if (g.is_bipartite())
+    {
+        cout << "The Graph is Bipartite"
+             << "\n";
+    }
+    else
+    {
+        cout << "The Graph is not Bipartite"
+             << "\n";
     }
 
     g.remove_edge(4, 1);
 
-    cout << "The Adjacency List after removing edge between 4 and 1 is: " << "\n";
+    cout << "The Adjacency List after removing edge between 4 and 1 is: "
+         << "\n";
 
-    for (auto it : g.adj) {
+    for (auto it : g.adj)
+    {
         cout << it.first << ": ";
-        for (auto i : it.second) {
+        for (auto i : it.second)
+        {
             cout << i << " ";
         }
         cout << "\n";
@@ -44,20 +56,28 @@ int main() {
 
     g.remove_node(4);
     cout << "\n";
-    cout << "The Adjacency List after removing node 4 is: " << "\n";
+    cout << "The Adjacency List after removing node 4 is: "
+         << "\n";
 
-    for (auto it : g.adj) {
+    for (auto it : g.adj)
+    {
         cout << it.first << ": ";
-        for (auto i : it.second) {
+        for (auto i : it.second)
+        {
             cout << i << " ";
         }
         cout << "\n";
     }
 
-    if (g.is_bipartite()) {
-        cout << "The Graph is Bipartite" << "\n";
-    } else {
-        cout << "The Graph is not Bipartite" << "\n";
+    if (g.is_bipartite())
+    {
+        cout << "The Graph is Bipartite"
+             << "\n";
+    }
+    else
+    {
+        cout << "The Graph is not Bipartite"
+             << "\n";
     }
     return 0;
 }

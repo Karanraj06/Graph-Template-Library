@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     digraph<int> g;
     g.add_edge(0, 4);
     g.add_edge(1, 3);
@@ -18,10 +19,13 @@ int main() {
     g.add_edge(8, 7);
 
     cout << "The number of strongly connected component is " << g.number_of_SCCs() << "\n";
-    cout << "The Strongly Connected components are: " << "\n";
+    cout << "The Strongly Connected components are: "
+         << "\n";
     vector<vector<int>> V1 = g.SCCs();
-    for (auto i : V1) {
-        for (auto j : i) {
+    for (auto i : V1)
+    {
+        for (auto j : i)
+        {
             cout << j << " ";
         }
         cout << "\n";

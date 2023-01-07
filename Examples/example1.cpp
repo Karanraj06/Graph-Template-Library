@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     graph<int> g;
     g.add_edge(0, 1);
     g.add_edge(0, 4);
@@ -25,9 +26,11 @@ int main() {
     cout << "The Degree of 4 is: " << g.degree(4) << "\n";
     cout << "The Adjacency List is: " << endl;
 
-    for (auto it : g.adj) {
+    for (auto it : g.adj)
+    {
         cout << it.first << ": ";
-        for (auto i : it.second) {
+        for (auto i : it.second)
+        {
             cout << i << " ";
         }
         cout << "\n";

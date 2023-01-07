@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     digraph<int> g;
     g.add_edge(1, 3);
     g.add_edge(2, 0);
@@ -14,7 +15,8 @@ int main() {
 
     vector<int> V = g.topological_sort();
     cout << "The Topological sort is: ";
-    for (auto it : V) {
+    for (auto it : V)
+    {
         cout << it << " ";
     }
     cout << "\n";
